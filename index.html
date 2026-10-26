@@ -98,5 +98,54 @@
 
     loadActivities();
   </script>
+
+<section id="lsLetterGame" style="padding:20px; margin:20px 0; background:#fff4d6; border-radius:16px; text-align:center; font-family:Arial,sans-serif;">
+  <h2>🔤 Letter Matching</h2>
+  <p>Find the letter that matches!</p>
+  <div id="lsTarget" style="font-size:64px; font-weight:bold; color:#2457a7; margin:20px;">A</div>
+  <div style="display:flex; justify-content:center; gap:12px; flex-wrap:wrap;">
+    <button onclick="lsCheckLetter('B')" style="font-size:28px; padding:15px 24px; border-radius:12px; background:white;">B</button>
+    <button onclick="lsCheckLetter('A')" style="font-size:28px; padding:15px 24px; border-radius:12px; background:white;">A</button>
+    <button onclick="lsCheckLetter('C')" style="font-size:28px; padding:15px 24px; border-radius:12px; background:white;">C</button>
+  </div>
+  <p id="lsFeedback" aria-live="polite" style="font-size:20px; font-weight:bold;"></p>
+  <button onclick="lsNextLetter()" style="font-size:18px; padding:12px 20px; border:0; border-radius:10px; background:#2457a7; color:white;">Next Letter ➜</button>
+</section>
+
+<script>
+let lsCurrentLetter = 'A';
+let lsLetterIndex = 0;
+const lsLetters = ['A', 'B', 'C', 'D', 'E'];
+
+function lsCheckLetter(letter) {
+  const feedback = document.getElementById('lsFeedback');
+  if (letter === lsCurrentLetter) {
+    feedback.textContent = '🌟 Well done! Correct!';
+    feedback.style.color = 'green';
+  } else {
+    feedback.textContent = '😊 Try again!';
+    feedback.style.color = '#b45309';
+  }
+}
+
+function lsNextLetter() {
+  lsLetterIndex = (lsLetterIndex + 1) % lsLetters.length;
+  lsCurrentLetter = lsLetters[lsLetterIndex];
+  document.getElementById('lsTarget').textContent = lsCurrentLetter;
+  document.getElementById('lsFeedback').textContent = '';
+  const choices = ['A', 'B', 'C', 'D', 'E'];
+  const shuffled = choices.sort(() => Math.random() - 0.5).slice(0, 3);
+  if (!shuffled.includes(lsCurrentLetter)) {
+    shuffled[0] = lsCurrentLetter;
+  }
+  shuffled.sort(() => Math.random() - 0.5);
+  const buttons = document.querySelectorAll('#lsLetterGame div button');
+  buttons.forEach((button, index) => {
+    button.textContent = shuffled[index];
+    button.setAttribute('onclick', "lsCheckLetter('" + shuffled[index] + "')");
+  });
+}
+</script>
+
 </body>
 </html>
